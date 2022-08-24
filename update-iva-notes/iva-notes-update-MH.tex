@@ -68,7 +68,7 @@
         nodes in empty cells
      }
 }
-
+\newcommand{\card}[1]{\# #1}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -99,39 +99,53 @@ This paper presents a polynomial-time algorithm for the \textit{maximum clique p
 \subsection*{\Romannum{2}. The Maximum Clique Problem}
 
 \begin{definition}[(simple) graph]\ \\
-    Let $V$ be a set of vertices and $E \subseteq \{ \{i,j\} \mid i,j \in V, i \neq j\}$ a set of edges. The pair $G = (V,E)$ is called a graph.
+    Let $V$ be a set of vertices and $E \subseteq \{ \{v,w\} \mid v,w \in V, v \neq w\}$ a set of edges. The pair $G = (V,E)$ is called a (simple) graph.
+    $G$ is called finite if $V$ (and therefore also $E$) is finite.
+    For $v$, $w \in V$ we write $vw$ instead of $\{v,w\}$.
+\end{definition}
+
+\begin{definition}[neighbors, degree]\ \\
+	Let $G = (V,E)$ be a graph and $v\in V$. 
+	Any $w \in V$ with $vw\in E$ is called a \emph{neighbor} of $v$.
+	The set of neighbors of $v$ is denoted by $N(v)$ and its cardinality,
+	the so-called \emph{degree of $v$}, by $\deg(v)$.	
 \end{definition}
 
 \begin{definition}[complete graph]\ \\
-    A graph $G = (V,E)$ is called complete graph, if every pair of distinct vertices is connected by a unique edge. That means $\forall ~ i,j \in V\colon i \neq j \Longrightarrow \{i,j\} \in E$. $G$ is complete if and only if every vertex has degree $|V|-1$. All complete graphs are their own maximal cliques.
-\end{definition}    
+    A graph $G = (V,E)$ is called complete graph
+    if every pair of distinct vertices is connected by a unique edge. 
+    That means $\forall ~ i,j \in V\colon i \neq j \Longrightarrow \{i,j\} \in E$.
+    A finite graph $G$ is complete if and only if 
+    every vertex has degree $\card V - 1$. 
+    All complete graphs are their own maximal cliques.
+\end{definition}
 
-The author denotes the complete graph by $\varphi$.
-
-\begin{definition}
-	Let $G = (V,E)$ be a graph and $W\subseteq V$. The subgraph of $G$ induced by $W$ is
+\begin{definition}[induced subgraph]\ \\
+	Let $G = (V,E)$ be a graph and $W\subseteq V$. 
+	The \emph{subgraph of $G$ induced by $W$} is
 	the graph $(W,E_W)$ with
 	\begin{equation*}
-		E_W = \{\{w, w'\}\mid w, w'\in W, w\neq w'\}
+		E_W = \{ww'\mid w, w'\in W, w\neq w'\}
 	\end{equation*}
 	and denoted by $G[W]$.
 \end{definition}
 
 \begin{definition}[Clique]\ \\
+    Let $G = (V,E)$ be a graph. 
     A subset $C$ of $V$ is called a clique if $G[C]$ is complete.
 \end{definition}
 
 \begin{definition}[Maximum clique]\ \\
-    The maximum clique of $G$ is called $\omega (G)$. That means  
-    \[ \omega (G) = \max\{|S| : S \text{ is a clique in }G\} \]
+    Let $G$ be a finite graph.
+    The clique number of $G$ is called $\omega(G)$ and defined as
+    \[ \omega(G) = \max\{\card C \mid C \text{ is a clique in }G\}. \]
 \end{definition}
 
 \begin{definition}[Largest subgraph of $G$ in which $\alpha$ exists]\ \\
-    Let $\alpha$ be the vertex of lowest degree:
-    \[ \alpha = \{j \in V : \deg(j) \text{ is minimal}\} \]
-    The author calls the subgraph, which contains $\alpha$ and all connected vertices to $\alpha$, the largest subgraph of $G$ in which $\alpha$ exists.
-
-    \textit{($\alpha$ and all his neighbours including edges)}
+	Let $G$ be a finite graph and $\alpha$ a vertex of minimal degree, i.e.
+    \[ \deg \alpha = \min\{\deg v \mid v \in V\}. \]
+    The author calls the subgraph induced by $\{\alpha\}\cup N(\alpha)$
+    the largest subgraph of $G$ in which $\alpha$ exists.
 \end{definition}
 
 \subsection*{\Romannum{3}. A Polynomial-Time Algorithm for the Maximum Clique Problem}
@@ -165,16 +179,15 @@ Pseudocode:
 \begin{lstlisting}[escapeinside={(*}{*)}]
 €MaxClique€(G) {
     @if@ (G is a complete graph)
-        @for each@ vertex of G: v
-            @if@ (|V| - 1 > max C[v])
-                max C[v] := |V|;
-                make max CP[v] point to a linked list containing V;
+        @for each@ vertex v of G:
+            @if@ (|V| - 1 > maxC[v])
+                maxC[v] := |V|;
+                make maxCP[v] point to a linked list containing V;
     @else@
-    find the vertex of lowest degree: (*$\alpha$*)
-    find the largest subgraph of G in which (*$\alpha$*) exists: G'(V',E')
-    €MaxClique€(G');
-    @if@ (V - (*$\alpha \neq \varphi$*))
-        €MaxClique€(G - (*$\alpha$*));
+    	find a vertex (*$\alpha$*) of lowest degree
+    	€MaxClique€(G[(*$N(\alpha)\cup\{\alpha\}$*)]);
+    	@if@ (V != {(*$\alpha$*)})
+        	€MaxClique€(G - (*$\alpha$*));
 }
 \end{lstlisting}
 
