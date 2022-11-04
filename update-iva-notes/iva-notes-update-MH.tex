@@ -69,6 +69,7 @@
      }
 }
 \newcommand{\card}[1]{\# #1}
+\newcommand{\maxc}{\mathrm{maxC}}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -145,7 +146,7 @@ This paper presents a polynomial-time algorithm for the \textit{maximum clique p
 	Let $G$ be a finite graph and $\alpha$ a vertex of minimal degree, i.e.
     \[ \deg \alpha = \min\{\deg v \mid v \in V\}. \]
     The author calls the subgraph induced by $\{\alpha\}\cup N(\alpha)$
-    the largest subgraph of $G$ in which $\alpha$ exists.
+    \emph{the largest subgraph of $G$ in which $\alpha$} exists.
 \end{definition}
 
 \subsection*{\Romannum{3}. A Polynomial-Time Algorithm for the Maximum Clique Problem}
@@ -180,8 +181,8 @@ Pseudocode:
 €MaxClique€(G) {
     @if@ (G is a complete graph)
         @for each@ vertex v of G:
-            @if@ (|V| - 1 > maxC[v])
-                maxC[v] := |V|;
+            @if@ (#V - 1 > maxC[v])
+                maxC[v] := #V;
                 make maxCP[v] point to a linked list containing V;
     @else@
     	find a vertex (*$\alpha$*) of lowest degree
@@ -193,7 +194,7 @@ Pseudocode:
 
 \newpage
 
-Auhtors example: 
+The author's example: 
 
           \begin{figure}[H]
             \centering
@@ -233,8 +234,8 @@ Auhtors example:
           \end{figure}
 
           We start with this arbitrary graph $G$. \\ 
-          $G$ is not complete. Therefor we choose the vertex of minimal degree, which is $g$. That means $\alpha := g$. \\
-          Now we determine the largest subgraph $G'$ of $G$, which contains $\alpha$.
+          $G$ is not complete. Therefore we choose the vertex of minimal degree, which is $g$. That means $\alpha = g$. \\
+          Now we determine the largest subgraph $G'$ of $G$ which contains $\alpha$.
 
         \begin{figure}[H]
           \centering
@@ -251,7 +252,7 @@ Auhtors example:
             \caption{Largest subgraph $G'$ which contains $g$}
          \end{figure}
 
-         $G'$ is complete. Therefor we updated the list and linked list, which was empty. The vertices $c$ and $g$ have value 2 and point to the linked list, which contains the clique we found. 
+         $G'$ is complete. Therefore we updated the list and linked list, which was empty. The vertices $c$ and $g$ have value 2 and point to the linked list, which shows that a clique we found. 
 
          \begin{figure}[H]
           \centering
@@ -308,7 +309,9 @@ Auhtors example:
             \caption{$G - g$}
           \end{figure}
 
-          Therefor we obtain the vertex of minimal degree, which is $f$. That means $\alpha := f$. The largest subgraph, which contains $f$ looks like follows:\\
+          We search for the vertex of minimal degree, which is $f$.
+          That means $\alpha := f$. The largest subgraph which contains $f$
+          looks like follows:\\
           
           $G' = (\{b,e,f,i\},\{\{b,e\},\{b,f\},\{b,i\},\{e,f\},\{e,i\},\{f,i\}\})$ 
           \begin{figure}[H]
@@ -382,7 +385,9 @@ Auhtors example:
             \caption{$G - f$}
           \end{figure}
 
-          Therefor we obtain the vertex of minimal degree, which is $b$. That means $\alpha := b$. The largest subgraph, which contains $b$ looks like follows:\\
+          Therefore we search for the vertex of minimal degree, which is $b$.
+          That means $\alpha = b$.
+          The largest subgraph which contains $b$ looks like follows:\\
           $G' = (\{b,d,e,i\},\{\{b,e\},\{b,d\},\{b,i\},\{d,e\},\{e,i\}\})$ 
           \begin{figure}[H]
             \centering
@@ -402,8 +407,13 @@ Auhtors example:
             \label{fig:third-step}
           \end{figure}
 
-          Now we can see that $G'$ is not complete. Therefor we repeat the algorithm on this graph \\
-          There are two vertices with the same minimal degree, which is two. We can choose $d$ or $i$. For such case there is no explanation in the paper. We assume that one can choose the vertex at random. In this case we choose $\alpha := d$. Later on there will be the same example but with choice for $i$.
+          Now we can see that $G'$ is not complete. Therefore we repeat the algorithm on this graph \\
+          There are two vertices with the same minimal degree, which is 2.
+          We can choose $d$ or $i$.
+          For such case there is no explanation in the paper.
+          We assume that we can use any vertex.
+          In this case, we select $\alpha = d$.
+          Later on, there will be the same calculations, but with choice for $i$.
           \\
           $G' = (\{b,d,e\},\{\{b,e\},\{b,d\},\{d,e\}\})$ 
 
@@ -418,11 +428,16 @@ Auhtors example:
             \draw (e) -- (b);
 
             \end{tikzpicture}
-            \caption{Largest subgraph $G'$ of graph in Figure \ref{fig:third-step} which contains  $d$ }
+            \caption{A largest subgraph $G'$ of graph in Figure~\ref{fig:third-step}
+            which contains  $d$}
           \end{figure}
 
 
-          $G'$ is complete and we can update the list. $b$ and $e$ have value four. They will not be updated, because the condition $|V| - 1 >$ max $C[v]$ is not satisfied. In this case $|V| - 1 = 2$ and $C[b] = 4$ also $C[e] = 4$. That is the reason, why only $d$ is pointing to the new clique. \\
+          $G'$ is complete and we can update the list. $b$ and $e$ have value 4.
+          They will not be updated, because the condition
+          $\card V - 1 > \maxc[v])$ is not satisfied.
+          In this case $\card V - 1 = 2$ and $C[b] = 4$ also $C[e] = 4$.
+          That is the reason, why only $d$ is pointing to the new clique. \\
 
           \begin{figure}[H]
             \centering
@@ -442,7 +457,9 @@ Auhtors example:
           \caption{Updated list}
         \end{figure}
 
-         Now we have a look on the graph in Figure \ref{fig:third-step}. We remove the vertex $d$ and see that the new graph is complete. $(G' - d) = (\{b,e,i\},\{\{b,e\},\{b,i\},\{e,i\}\})$.  \\
+         Now we have a look at the graph in Figure~\ref{fig:third-step}.
+         We remove the vertex $d$ and see that the new graph is complete:
+         $G' - d = (\{b,e,i\},\{\{b,e\},\{b,i\},\{e,i\}\})$.  \\
 
           
           \begin{figure}[H]
@@ -457,12 +474,16 @@ Auhtors example:
 
   
               \end{tikzpicture}
-              \caption{Graph in Figure \ref{fig:third-step} with removed $d$}
+              \caption{Graph in Figure~\ref{fig:third-step} with $d$ removed}
               \label{fig:removed-d}
             \end{figure}
-            In this case the conditions for all vertices in the clique in Figure \ref{fig:removed-d} are not satisfied. Therefor there is no vertex which has to be updatetd. The list and linked list stay the same as before.
+            In this case, the conditions for all vertices in the clique
+            in Figure~\ref{fig:removed-d} are not satisfied.
+            Therefore there is no vertex which has to be updated.
+            The list and linked list stay the same as before.
 
-            Now we remove $\alpha$ from the graph $G$ and we can see that $G - b$ is not complete. \\
+            Now we remove $\alpha$ from the graph $G$ and
+            we can see that $G - b$ is not complete.\\
 
             \begin{figure}[H]
             \centering
@@ -491,7 +512,9 @@ Auhtors example:
             \caption{$G - b$}
           \end{figure}
 
-          We obtain the vertex of minimal degree, which is $i$. That means $\alpha := i$. The largest subgraph, which contains $i$ looks like follows:\\
+          We obtain the vertex of minimal degree, which is $i$.
+          That means $\alpha = i$. The largest subgraph
+          which contains $i$ looks like follows:\\
           $G' = (\{a,e,i,h\},\{\{a,e\},\{a,i\},\{a,h\},\{e,i\},\{e,h\},\{i,h\}\})$ 
 
           \begin{figure}[H]
@@ -513,8 +536,10 @@ Auhtors example:
             \label{fig:contains-i}
           \end{figure}
 
-          We can see that the graph in figure \ref{fig:contains-i} is complete. Therefor it is a clique and the list will be updtated as follows: \\
-         \begin{tikzpicture}
+          We can see that the graph in figure~\ref{fig:contains-i} is complete.
+          Therefore it is a clique and the list will be updated as follows:\\
+          \begin{center}
+          	\begin{tikzpicture}
             \matrix[table] (A)
             { |[draw=none]|
                   &a&b&c&d&e&f&g&h&i\\
@@ -528,6 +553,7 @@ Auhtors example:
             \foreach \s/\t in {8/B,4/B,3/C,6/C,7/C,10/C,5/D,2/E,9/E}
               \draw[-stealth',shorten >=3pt,shorten <=3pt] (A-3-\s.south) -- (\t-1-1.north);
           \end{tikzpicture}
+          \end{center}
 
           $G - i$ is a complete graph. 
 
@@ -557,21 +583,24 @@ Auhtors example:
           \end{figure}
 
           The next and last step is to update the list containing the cliques.\\
-          Now we have a problem at codeline 4. Let us look more closely on the if-condition:
-          \[ \textbf{\texttt{if (|V| - 1 > max C[v])}} \]
-          Which vertices of our clique in figure \ref{fig:finalgraph} satisfy the condition? 
-
-          $|V| - 1 = 5 - 1 = 4$
+          Now we have a problem at codeline 4.
+          Let us have a close look at the if-condition:
+          \[ \textbf{\texttt{if (\#V - 1 > maxC[v])}} \]
+          Which vertices of our clique in figure~\ref{fig:finalgraph}
+          satisfy the condition? We have $\card V - 1 = 5 - 1 = 4$.
 
           \begin{itemize}
-            \item[\textcolor{red}{\textbullet}] $C[a] = 4 ~\ngtr~ 4$ 
-            \item[\textcolor{Green}{\textbullet}] $C[c] = 4 ~>~ 2$
-            \item[\textcolor{Green}{\textbullet}] $C[d] = 4 ~>~ 3$
-            \item[\textcolor{red}{\textbullet}] $C[e] = 4 ~\ngtr~ 4$
-            \item[\textcolor{red}{\textbullet}] $C[h] = 4 ~\ngtr~ 4$
+            \item[\textcolor{red}{\textbullet}] $\maxc[a] = 4 ~\ngtr~ 4$ 
+            \item[\textcolor{Green}{\textbullet}] $\maxc[c] = 4 ~>~ 2$
+            \item[\textcolor{Green}{\textbullet}] $\maxc[d] = 4 ~>~ 3$
+            \item[\textcolor{red}{\textbullet}] $\maxc[e] = 4 ~\ngtr~ 4$
+            \item[\textcolor{red}{\textbullet}] $\maxc[h] = 4 ~\ngtr~ 4$
           \end{itemize}
 
-          The vertices $a$,$e$ and $h$ will not be updated. This is a mistake, because the vertices in the list must be part of the the maximum clique found for each vertex. In this case the maximum clique found is correct 
+          The vertices $a$, $e$ and $h$ will not be updated.
+          This is a mistake, because the vertices in the list must be part of
+          the maximum clique found for each vertex.
+          In this case, the maximum clique found is correct 
           but the list and linked list are not. 
 
           \begin{figure}[H]
@@ -597,17 +626,23 @@ Auhtors example:
           \caption{Incorrect list and linked list}
         \end{figure}
 
-        The red values represent the error. The green values are correct. The red colored clique should not be stated anymore. The vertices $a$ and $h$ still point to this clique because the condition is not satisfied. 
+        The red values represent the error.
+        The green values are correct.
+        The red colored clique should not be stated anymore.
+        The vertices $a$ and $h$ still point to this clique
+        because the condition is not satisfied. 
 
 
-        Our assumption is that the codeline 4 must be adjusted as follows: 
-        \[ \texttt{\textcolor{red}{if (|V| - 1 > max C[v])}} \text{ to } \texttt{\textcolor{Green}{if (|V| > max C[v])}} \]
+        Our assumption is that codeline 4 must be adjusted as follows: 
+        \[ \texttt{\textcolor{red}{if (\#V - 1 > maxC[v])}}
+        \qquad\text{ to }\qquad \texttt{\textcolor{Green}{if (\#V > maxC[v])}} \]
 
-        Let us repeat the last step of the example with the adjusted code. In this case we get the authors solution and the correct list:
+        Let us repeat the last step of the example with the adjusted code.
+        In this case we get the author's solution and the correct list:
 
-        \[ \textbf{\texttt{if (|V| > max C[v])}} \]
+        \[ \textbf{\texttt{if (\#V > maxC[v])}} \]
 
-        $|V| = 5 $
+        $\card V = 5 $
 
         \begin{itemize}
           \item[\textcolor{Green}{\textbullet}] $C[a] = 5 >~ 4$ 
@@ -617,7 +652,8 @@ Auhtors example:
           \item[\textcolor{Green}{\textbullet}] $C[h] = 5 ~>~ 4$
         \end{itemize}
 
-        All vertices satisfy the updated if-condition. The list looks like as follows:
+        All vertices satisfy the updated if-condition.
+        The list looks as follows:
 
         \begin{figure}[H]
           \centering
@@ -640,7 +676,8 @@ Auhtors example:
         \caption{Correct list and linked list}
         \end{figure}
 
-        Now we get the authors solution and the algorithm stops. The maximum clique found (in both cases) is $\{a,c,d,e,h\}$.
+        Now we get the authors solution and the algorithm stops.
+        The maximum clique found (in both cases) is $\{a,c,d,e,h\}$.
 
   
    
